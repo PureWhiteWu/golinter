@@ -31,11 +31,18 @@
 
 ```json
 {
-  "error_num": 2,  // int 类型
+  "error_num": 2, 
   "errors": [
     "error1",
     "error2"
-  ]  // 一个array，每个字符串代表一个error
+  ] 
 }
 ```
 
+使用命令如下：
+
+```shell
+go run server.go dispatch.go
+```
+
+当然也可以在本地自行编译完打包成二进制运行。
