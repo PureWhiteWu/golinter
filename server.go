@@ -83,7 +83,9 @@ func lintHandler(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, httpInternalError, 500)
 		return
 	}
-	json.NewEncoder(w).Encode(result)
+	if err = json.NewEncoder(w).Encode(result); err {
+		log.Fatal(err)
+	}
 }
 
 func main() {
