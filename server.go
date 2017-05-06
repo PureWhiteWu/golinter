@@ -77,13 +77,21 @@ func lintHandler(w http.ResponseWriter, r *http.Request) {
 		}
 	}()
 	defer tmpfile.Close()
+
 	linter := dispatch(code)
+	if linter == nil {
+		log.Fatal("No available linter found.")
+		http.Error(w, httpInternalError, 500)
+		return
+	}
+
 	result, err := linter(tmpfile)
 	if err != nil {
 		log.Fatal(err)
 		http.Error(w, httpInternalError, 500)
 		return
 	}
+
 	if err = json.NewEncoder(w).Encode(result); err != nil {
 		log.Fatal(err)
 	}
