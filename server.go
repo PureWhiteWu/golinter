@@ -5,6 +5,7 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"strings"
 )
 
 const (
@@ -14,7 +15,7 @@ const (
 )
 
 var (
-	supportedLanguages = []string{"java", "Java"}
+	supportedLanguages = []string{"java", "cpp", "python"}
 	languageSuffix     = map[string]string{
 		"java":   "java",
 		"python": "py",
@@ -54,7 +55,7 @@ func lintHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	code := Code{
-		Language: r.PostFormValue("language"),
+		Language: strings.ToLower(r.PostFormValue("language")),
 		Source:   r.PostFormValue("source"),
 	}
 	if !checkLanguage(code) {
