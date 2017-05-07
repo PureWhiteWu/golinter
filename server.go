@@ -33,18 +33,15 @@ type Result struct {
 	Errors   []string `json:"errors"`
 }
 
-func checkLanguage(code Code) bool {
-	in := false
+func checkLanguage(code Code) (in bool) {
+	in = false
 	for _, language := range supportedLanguages {
 		if code.Language == language {
 			in = true
 			break
 		}
 	}
-	if in {
-		return true
-	}
-	return false
+	return
 }
 
 func lintHandler(w http.ResponseWriter, r *http.Request) {
