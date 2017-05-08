@@ -48,4 +48,15 @@ go run server.go dispatch.go
 
 端口是48722（不要问我为啥是这个端口）
 
-当然也可以在本地自行编译完打包成二进制运行。
+
+
+#### 新增docker支持
+
+```Sh
+# 墙外
+docker run -d -p 8080:48722 daniel48/golinter:latest
+# 墙内
+docker run -d -p 8080:48722 daocloud.io/daniel48/golinter:latest
+```
+
+之后就可以通过`8080`端口使用啦，端口可以自定义
