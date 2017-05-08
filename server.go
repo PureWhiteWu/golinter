@@ -97,7 +97,7 @@ func lintHandler(w http.ResponseWriter, r *http.Request) {
 
 func main() {
 	http.HandleFunc("/", lintHandler)
-	log.Print("server is listenning on port 48722")
+	log.Println("server is listenning on port 48722")
 	err := http.ListenAndServe(":48722", nil)
 	if err != nil {
 		log.Fatal("ListenAndServe: ", err)
