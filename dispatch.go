@@ -75,6 +75,27 @@ func lintPython(tmpfile *os.File) (Result, error) {
 	return result, nil
 }
 
+func lintJavascript(tmpFile *os.File) (Result, error) {
+	os.Chdir("./linters/javascript/")
+	cmd := exec.Command("npm", "run", "lint", tmpFile.Name())
+	b, _ := cmd.CombinedOutput()
+	re, _ := regexp.Compile(`(\d+?:\d+?.*?)\n`)
+	tmp := re.FindAllStringSubmatch(string(b), -1)
+
+	var errors []string
+
+	for _, strSlice := range tmp {
+		errors = append(errors, strSlice[1])
+	}
+
+	result := Result{
+		ErrorNum: len(errors),
+		Errors:   errors,
+	}
+
+	return result, nil
+}
+
 // dispatch linters
 func dispatch(code Code) lintFunc {
 	switch code.Language {
@@ -84,6 +105,8 @@ func dispatch(code Code) lintFunc {
 		return lintCpp
 	case "python":
 		return lintPython
+	case "javascript":
+		return lintJavascript
 	default:
 		return nil
 	}

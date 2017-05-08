@@ -15,11 +15,12 @@ const (
 )
 
 var (
-	supportedLanguages = []string{"java", "cpp", "python"}
+	supportedLanguages = []string{"java", "cpp", "python", "javascript"}
 	languageSuffix     = map[string]string{
 		"java":   "java",
 		"python": "py",
 		"cpp":    "cpp",
+		"javascript": "js",
 	}
 )
 
@@ -96,6 +97,7 @@ func lintHandler(w http.ResponseWriter, r *http.Request) {
 
 func main() {
 	http.HandleFunc("/", lintHandler)
+	log.Print("server is listenning on port 48722")
 	err := http.ListenAndServe(":48722", nil)
 	if err != nil {
 		log.Fatal("ListenAndServe: ", err)
