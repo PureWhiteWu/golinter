@@ -9,68 +9,59 @@ import (
 
 type lintFunc func(*os.File) (Result, error)
 
-func lintJava(tmpfile *os.File) (Result, error) {
-	cmd := exec.Command("java", "-jar", "linters/java/checkstyle-7.7-all.jar", "-c", "linters/java/sun_checks.xml", tmpfile.Name())
-	b, _ := cmd.CombinedOutput()
-	re, _ := regexp.Compile("(\\[ERROR].*?)\n")
-	tmp := re.FindAllString(string(b), -1)
-	var s []string
+func lintJava(tmpFile *os.File) (Result, error) {
+	cmd := exec.Command("java", "-jar", "linters/java/checkstyle-7.7-all.jar", "-c", "linters/java/sun_checks.xml", tmpFile.Name())
+	lintOutput, _ := cmd.CombinedOutput()
+	re, _ := regexp.Compile(`(\[ERROR].*?)\n`)
+	tmp := re.FindAllStringSubmatch(string(lintOutput), -1)
+
 	// replace unnecessary information with ""
-	for _, str := range tmp {
-		re, _ = regexp.Compile("\n")
-		str = re.ReplaceAllString(str, "")
+	var lintErrors []string
+	for _, strSlice := range tmp {
 		re, _ = regexp.Compile("/.*?java:")
-		str = re.ReplaceAllString(str, "")
-		s = append(s, str)
+		t := re.ReplaceAllString(strSlice[1], "")
+		lintErrors = append(lintErrors, t)
 	}
 
 	result := Result{
-		ErrorNum: len(s),
-		Errors:   s,
+		ErrorNum: len(lintErrors),
+		Errors:   lintErrors,
 	}
 	return result, nil
 }
 
-func lintCpp(tmpfile *os.File) (Result, error) {
-	cmd := exec.Command("python", "linters/cpp/cpplint.py", "--filter=-legal/copyright", tmpfile.Name())
-	b, _ := cmd.CombinedOutput()
-	re, _ := regexp.Compile(`cpp:.*?\n`)
-	tmp := re.FindAllString(string(b), -1)
-	var s []string
-	// replace unnecessary information with ""
-	for _, str := range tmp {
-		re, _ = regexp.Compile("\n")
-		str = re.ReplaceAllString(str, "")
-		re, _ = regexp.Compile("cpp:")
-		str = re.ReplaceAllString(str, "")
-		s = append(s, str)
+func lintCpp(tmpFile *os.File) (Result, error) {
+	cmd := exec.Command("python", "linters/cpp/cpplint.py", "--filter=-legal/copyright", tmpFile.Name())
+	lintOutput, _ := cmd.CombinedOutput()
+	re, _ := regexp.Compile(`cpp:(.*?)\n`)
+	tmp := re.FindAllStringSubmatch(string(lintOutput), -1)
+
+	var lintErrors []string
+	for _, strSlice := range tmp {
+		lintErrors = append(lintErrors, strSlice[1])
 	}
 
 	result := Result{
-		ErrorNum: len(s),
-		Errors:   s,
+		ErrorNum: len(lintErrors),
+		Errors:   lintErrors,
 	}
 	return result, nil
 }
 
-func lintPython(tmpfile *os.File) (Result, error) {
-	cmd := exec.Command("flake8", tmpfile.Name())
-	b, _ := cmd.CombinedOutput()
-	re, _ := regexp.Compile(".*?\n")
-	tmp := re.FindAllString(string(b), -1)
-	var s []string
-	// replace unnecessary information with ""
-	for _, str := range tmp {
-		re, _ = regexp.Compile("\n")
-		str = re.ReplaceAllString(str, "")
-		re, _ = regexp.Compile("/.*?py:")
-		str = re.ReplaceAllString(str, "")
-		s = append(s, str)
+func lintPython(tmpFile *os.File) (Result, error) {
+	cmd := exec.Command("flake8", tmpFile.Name())
+	lintOutput, _ := cmd.CombinedOutput()
+	re, _ := regexp.Compile("/.*?py:(.*?)\n")
+	tmp := re.FindAllStringSubmatch(string(lintOutput), -1)
+
+	var lintErrors []string
+	for _, strSlice := range tmp {
+		lintErrors = append(lintErrors, strSlice[1])
 	}
 
 	result := Result{
-		ErrorNum: len(s),
-		Errors:   s,
+		ErrorNum: len(lintErrors),
+		Errors:   lintErrors,
 	}
 	return result, nil
 }
