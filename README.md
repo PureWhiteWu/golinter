@@ -11,7 +11,8 @@
 
 * java
 * cpp
-* Python
+* python
+* javascript
 * 更多语言将被支持
 
 ### 使用说明
