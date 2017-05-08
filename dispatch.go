@@ -78,19 +78,18 @@ func lintPython(tmpfile *os.File) (Result, error) {
 func lintJavascript(tmpFile *os.File) (Result, error) {
 	os.Chdir("./linters/javascript/")
 	cmd := exec.Command("npm", "run", "lint", tmpFile.Name())
-	b, _ := cmd.CombinedOutput()
+	lintOutput, _ := cmd.CombinedOutput()
 	re, _ := regexp.Compile(`(\d+?:\d+?.*?)\n`)
-	tmp := re.FindAllStringSubmatch(string(b), -1)
+	tmp := re.FindAllStringSubmatch(string(lintOutput), -1)
 
-	var errors []string
-
+	var lintErrors []string
 	for _, strSlice := range tmp {
-		errors = append(errors, strSlice[1])
+		lintErrors = append(lintErrors, strSlice[1])
 	}
 
 	result := Result{
-		ErrorNum: len(errors),
-		Errors:   errors,
+		ErrorNum: len(lintErrors),
+		Errors:   lintErrors,
 	}
 
 	return result, nil
