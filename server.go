@@ -46,6 +46,7 @@ func checkLanguage(code Code) (in bool) {
 }
 
 func lintHandler(w http.ResponseWriter, r *http.Request) {
+	log.Printf("Received request from %v", r.RemoteAddr)
 	defer r.Body.Close()
 	if r.Method != "POST" {
 		http.Error(w, httpMethodNotAllowed, 405)
