@@ -2,7 +2,6 @@ package main
 
 import (
 	"io/ioutil"
-	"log"
 	"os"
 	"os/exec"
 	"regexp"
@@ -15,7 +14,6 @@ func lintJava(tmpFile *os.File) (Result, error) {
 	lintOutput, _ := cmd.CombinedOutput()
 	re, _ := regexp.Compile(`(\[ERROR].*?)\n`)
 	tmp := re.FindAllStringSubmatch(string(lintOutput), -1)
-	log.Println(string(lintOutput))
 
 	// replace unnecessary information with ""
 	var lintErrors []string
