@@ -67,8 +67,7 @@ func lintPython(tmpFile *os.File) (Result, error) {
 }
 
 func lintJavascript(tmpFile *os.File) (Result, error) {
-	os.Chdir("./linters/javascript/")
-	cmd := exec.Command("npm", "run", "lint", tmpFile.Name())
+	cmd := exec.Command("./linters/javascript/node_modules/eslint/bin/eslint.js", "-c", "./linters/javascript/.eslintrc", tmpFile.Name())
 	lintOutput, _ := cmd.CombinedOutput()
 	re, _ := regexp.Compile(`(\d+?:\d+?.*?)\n`)
 	tmp := re.FindAllStringSubmatch(string(lintOutput), -1)

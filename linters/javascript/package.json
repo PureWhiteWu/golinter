@@ -4,7 +4,7 @@
   "description": "",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "lint": "eslint -c ./.eslintrc"
+    "lint": ""
   },
   "author": "LYF1999",
   "license": "ISC",
