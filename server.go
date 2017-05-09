@@ -15,7 +15,7 @@ const (
 )
 
 var (
-	supportedLanguages = []string{"java", "cpp", "python"}
+	supportedLanguages = []string{"java", "cpp", "python", "javascript"}
 	languageSuffix     = map[string]string{
 		"java":       "java",
 		"python":     "py",
