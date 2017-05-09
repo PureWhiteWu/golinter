@@ -26,3 +26,4 @@ _testmain.go
 
 yarn.lock
 node_modules
+*.log
