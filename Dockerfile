@@ -2,7 +2,7 @@ FROM golang:onbuild
 MAINTAINER Pure White daniel48@126.com
 
 RUN curl -sL https://deb.nodesource.com/setup_6.x | bash - \
-    && apt-get install -y openjdk-7-jre python python-dev python-pip nodejs\
+    && apt-get install -y jessie-backports  openjdk-8-jre-headless ca-certificates-java python python-dev python-pip nodejs\
     && apt-get clean && java -version && pip install flake8
 
 RUN go get github.com/golinter/golinter
