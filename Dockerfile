@@ -7,9 +7,8 @@ RUN echo "deb http://http.debian.net/debian jessie-backports main" > /etc/apt/so
     && apt-get install -y python python-dev python-pip nodejs\
     && apt-get clean && java -version && pip install flake8
 
-RUN go get github.com/golinter/golinter
 EXPOSE 48722
-WORKDIR $GOPATH/src/github.com/golinter/golinter/linters/javascript
+WORKDIR /go/src/app/linters/javascript
 RUN npm install
-WORKDIR ../..
+WORKDIR /go/src/app
 CMD ["go", "run", "server.go", "dispatch.go"]
